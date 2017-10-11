@@ -233,11 +233,40 @@ function draw_pie(config){
 	var value_param = config.value_param
 	var keys = data.map(function(d){ return d[name_param]})
 	var values = data.map(function(d){return d[value_param]})
-	var color = d3.scaleOrdinal()
-    					.range(["#98abc5", "#8a89a6", "#7b6888"])
-    					.domain(keys);
-    var scale = d3.scaleLinear()
-    				.domain([0,d3.max(values)])
-    				.range([0,svg_height])
+	var color = d3.scaleOrdinal(d3.schemeCategory10);
+    
+    var pie = d3.pie()
+    			.value(function(d){return d[value_param]})
+    var arc = d3.arc()
+  		.innerRadius(0)
+  		.outerRadius(svg_height/2);
+  	var slices = pie(data)
+  	var g = target.append("g").attr("transform","translate("+(margins.left+svg_width/2)+","+(margins.top+svg_height/2)+")");
+	g.selectAll('path.slice')
+  	 .data(slices)
+     .enter()
+     .append('path')
+     .attr('class', 'slice')
+     .attr('d', arc)
+     .attr('fill', function(d) {
+          return color(d.data[value_param]);
+        });
+
+// building a legend is as simple as binding
+// more elements to the same data. in this case,
+// <text> tags
+
+g.append('g')
+  .attr('class', 'legend')
+    .selectAll('text')
+    .data(slices)
+      .enter()
+        .append('text')
+          .text(function(d) { return  d.data[name_param]; })
+          .attr('fill', function(d) { return color(d.data[name_param]); })
+          .attr('y', function(d, i) { return 20 * (i + 1); })
+    
+
+
 
 }

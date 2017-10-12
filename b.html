@@ -2,18 +2,37 @@
 <html>
 <head>
 	<title></title>
+    <style type="text/css">
+   
+        .tooltip {                                                      
+        background: #eee;                                               
+        box-shadow: 0 0 5px #999999;                                    
+        color: #333;                                                    
+        display: none;                                                  
+        font-size: 12px;                                                
+        left: 130px;                                                    
+        padding: 10px;                                                  
+        position: absolute;                                             
+        text-align: center;                                             
+        top: 95px;                                                      
+        width: 80px;                                                    
+        z-index: 10;                                                    
+      }      
+    </style>
 </head>
 <body>
-<div id="chart1"></div>
+<div height="275px"  id="chart1"></div>
 <div id="chart2"></div>
 <div id="chart3"></div>
 <div id="chart4"></div>
+
 <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
 <script type="text/javascript" src="templates.js"></script>
 <script type="text/javascript">
-	var width = 500
-	var height = 500
-	var margins = {'top':30, 'bottom':40,'left':60,'right':30}
+	var width = 275
+	var height = 275
+	var margins = {'top':(height*30)/500, 
+    'bottom':(height*50)/500,'left':(width*70)/500,'right':(width*30)/500}
 	var sales=[ 
 	        {"product":"p1","sales":230},
 			{"product":"p2","sales":200},
@@ -34,12 +53,10 @@
                  	'xaxis_name':"product",
                  	'yaxis_name':"sales",
                  	'x_param':"product",
-                 	'y_param':"sales"
+                 	'y_param':"sales",
+                    'div_id':"chart1",
                  }
 	draw_linegraph(config)
-	var svg = d3.select("#chart2").append("svg")
-                             .attr("width",(width+margins.right+margins.left))
-                             .attr("height",(height+margins.top+margins.bottom));
     var config1 = {'data':sales,
 					'target':svg,
 					'svg_width':width,
@@ -49,7 +66,7 @@
                  	'yaxis_name':"sales",
                  	'x_param':"product",
                  	'y_param':"sales",
-                 	'target':svg
+                    "div_id":"chart2"
                  }
     draw_bargraph(config1)
     var svg = d3.select("#chart3").append("svg")
@@ -68,10 +85,10 @@
                  	'xaxis_name':"projects",
                  	'yaxis_name':"bug count",
                  	'x_param':"name",
-                 	'target':svg
+                 	'div_id':"chart3"
                  }
     draw_stackedbarchar(config2)
-    var svg = d3.select("#chart3").append("svg")
+    var svg = d3.select("#chart4").append("svg")
                              .attr("width",(width+margins.right+margins.left))
                              .attr("height",(height+margins.top+margins.bottom));
     var config3={
@@ -82,7 +99,9 @@
 					'margins':margins,
 					'target':svg,
                     'name_param':"product",
-                    'value_param':"sales"
+                    'value_param':"sales",
+                    'div_id':"chart4",
+                    "chart_name":"PIE CHART"
     };
     draw_pie(config3)
 </script>
